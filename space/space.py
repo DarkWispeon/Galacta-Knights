@@ -4,16 +4,27 @@ pygame.mixer.init()
 
 print("\033c")
 
+
+#defines the height and width of the window
 WIDTH, HEIGHT = 1600, 1000
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+
+#sets the name of the window
 pygame.display.set_caption("Galacta Knights")
 
+#changes the defauslt icon of the window
+icon = pygame.image.load('icon.png')
+pygame.display.set_icon(icon)
+
+
+#definig certain game variables
 MAX_BULL = 6
 FPS = 60
 BULL_VEL = 15
 VEL = 10
 HP = 20
 
+#sound managment
 LASER_HIT = pygame.mixer.Sound('hit.wav')
 pygame.mixer.Sound.set_volume(LASER_HIT, 0.5)
 LASER_SHOOT = pygame.mixer.Sound('shot.wav')
@@ -21,25 +32,29 @@ DEAD_SFX = pygame.mixer.Sound('ded.wav')
 BGM = pygame.mixer.Sound('bgm.mp3')
 pygame.mixer.Sound.set_volume(BGM, 0.3)
 
-
+#font for the game
 FONT = pygame.font.SysFont('retrogaming', 40)
 
+#hitboxes
 BORDER = pygame.Rect(0, HEIGHT//2, WIDTH, 2.5)
 WHITE_SHIP = pygame.image.load("wit.png")
 PURPLE_SHIP = pygame.image.load("purp.png")
 BG = pygame.transform.scale(pygame.image.load("bg.png"),(WIDTH, HEIGHT))
 
+#laser images
 LASER_R = pygame.image.load("red_laser.png")
 LASER_G = pygame.image.load("green_laser.png")
 
+#collision events
 PURP_HIT = pygame.USEREVENT + 1
 WIT_HIT = pygame.USEREVENT + 2
 
+#Starts the background music
 BGM.play()    
 pygame.mixer.pause()
 
 
-
+#function for dealing with the laser movement, collision, etc.
 def handle_lasers(laser_g, laser_r, wit, purp):
     for bullet1 in laser_r:
         bullet1.y += BULL_VEL
@@ -75,6 +90,8 @@ def handle_lasers(laser_g, laser_r, wit, purp):
         elif bullet2.y < 0:
              laser_g.remove(bullet2)
 
+
+#updates the window
 def draw_window(wit, purp, laser_g, laser_r, wit_hp, purp_hp):
     WIN.blit(BG, (0, 0))
     pygame.draw.rect(WIN, (0, 204, 0), BORDER)
@@ -167,6 +184,7 @@ def draw_window(wit, purp, laser_g, laser_r, wit_hp, purp_hp):
 
     pygame.display.update()
 
+#movement for the white ship
 def handle_movement_wit(keys_pressed, wit):
 
         if keys_pressed[pygame.K_w] and wit.y - VEL > -5:
@@ -195,8 +213,7 @@ def handle_movement_wit(keys_pressed, wit):
             if keys_pressed[pygame.K_d] and wit.x + VEL + wit.height < WIDTH:
                 wit.x += 50
 
-            
-
+#movement for the purple ship
 def handle_movement_purp(keys_pressed, purp):
         if keys_pressed[pygame.K_UP]and purp.y - VEL + 10 > BORDER.y:
             purp.y -= 10
@@ -223,6 +240,7 @@ def handle_movement_purp(keys_pressed, purp):
             if keys_pressed[pygame.K_RIGHT]and purp.x + VEL + purp.height < WIDTH:
                 purp.x += 50
 
+#when the winner is determined
 def winner(text):
     drw_txt = FONT.render(text, 1, (255,255,255))
     pygame.mixer.pause()
@@ -238,7 +256,7 @@ def winner(text):
     pygame.time.delay(5000)
 
 
-
+#main function for the game
 def main():
     pygame.mixer.unpause()
     wit = pygame.Rect(900, 250,75,75)
@@ -303,7 +321,7 @@ def main():
         
 
 
-            
+#game initialization        
 if __name__ == "__main__":
     main()   
     
